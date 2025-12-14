@@ -7,38 +7,79 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <header>
-        <h1 class="titulo"> Bienvenidos al Desarrollo Web</h1>
-    </header>
-    <h2>Clase de la semana 3</h2> 
-    <hr> 
-    <h3>Aprendiendo Etiquetas en "html"</h3>
-    <p>Las etiquetas en HTML son la base para estructurar y presentar contenido en la web. Cada <em>etiqueta</em>  tiene un propósito específico y define cómo se debe interpretar el contenido por el navegador.</p>
-    <br> 
+    <main>
+        <header>
+            <h1 class="titulo-01"> Bienvenidos al Desarrollo Web</h1>
+        </header>
+    </main>
     <br>
-    <h3>Estructura del documento</h3>
-    <p>Las etiquetas organizan el contenido en secciones (encabezados, párrafos, listas, tablas).
-    Ejemplo: <strong>"h1"</strong> para títulos, <strong>"p"</strong> para párrafos.</p>
-    <br> 
-    <br>
-    <h3>Semántica y significado</h3>
-    <p>Las etiquetas semánticas (como <strong>"header"</strong>, <strong>"article"</strong>, <strong>"footer"</strong>) indican el rol del contenido, mejorando la accesibilidad y el SEO.
-    entender la página.</p>
-    <br>
-    <br>
-    <h3>Presentación y Estilo</h3>
-    <p>Aunque el diseño se maneja con CSS, etiquetas como <strong>"img"</strong> o <strong>"video"</strong> permiten insertar elementos multimedia.
-    <em>HTML</em> define la estructura, <em>CSS</em> la apariencia.</p>
-    <br>
-    <br>
-    <h3>Interactividad</h3>
-    <p>Etiquetas como <strong>"button"</strong> y <strong>"form"</strong> permiten interacción con el usuario.
-    Se combinan con <em>JavaScript</em> para funcionalidades dinámicas.</p>
+
+    <hr>
+    <h2 class="titulo-02">Clase de la semana 3</h2> 
+    <hr>
     <br>
     <br>
     <br>
-    <h3>Compatibilidad y estándares</h3>
-    <p>Usar etiquetas correctas asegura que la página funcione en diferentes navegadores y dispositivos.</p>
+    <nav class="links">
+        <li><a href="Estructuras/Aprendiendo_Etiquetas/index.html">Aprendiendo Etiquetas en html</a></li><br>
+        <li><a href="Estructuras/Compatibilidad/index.html">Compatibilidad</a></li><br>
+        <li><a href="Estructuras/Estructura_del_documento/Index.html">Estructura del documento</a></li> <br>
+        <li><a href="Estructuras/Interactividad/index.html">Interactividad</a></li><br>
+        <li><a href="Estructuras/Presentación_y_estilo/index.html">Presentación y Estilo</a></li><br>
+        <li><a href="Estructuras/Semántica_y_Significado/index.html">Semántica & significado</a></li>  
+    </nav>
     
+    <br>
+    <h4 class="titulo-04">Video Etiquetas HTML</h4>
+
+    <video controls src="assets/video/Listado de Etiquetas HTML, su Función y sus Atributos _ TUTORIAL 2.mp4" class="video-01"></video>
+    <br>
+    <br>
+    <br>
+    <br>
+    
+    <section class="tabla-section">
+    <div class="tabla-container">
+        <h3 class="tabla-titulo">Tabla HTML</h3>
+
+        <table class="tabla-pro tabla-fit">
+        <thead>
+            <tr>
+            <th>Etiquetas</th>
+            <th>Porcentaje de Uso</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td><code>&lt;head&gt;</code></td><td>12%</td></tr>
+            <tr><td><code>&lt;h1 a h6&gt;</code></td><td>19%</td></tr>
+            <tr><td><code>&lt;p&gt;</code></td><td>54%</td></tr>
+            <tr><td><code>&lt;br&gt;</code></td><td>3%</td></tr>
+            <tr><td><code>&lt;img&gt;</code></td><td>2%</td></tr>
+        </tbody>
+        <caption class="tabla-caption">Uso estimado de etiquetas comunes</caption>
+        </table>
+    </div>
+    </section>
+    <br>
+    <br> 
+    <div class="form-group">
+        <h3>Contacto</h3>
+        <h4>Déjanos tus datos y pronto te contactaremos</h4>
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" placeholder="Escribe tu nombre" required>
+    
+        <label for="correo">Correo:</label>
+        <input type="email" id="correo" name="correo" placeholder="ejemplo@correo.com" required>
+        <br>
+        <br>
+        <button type="submit" class="btn-enviar">Enviar</button>
+        </form>
+    </div>
+    <br>
+    <br> 
+    <footer>
+        <p>&copy; 2025 Mi Sitio Web</p>
+    </footer>
+
 </body>
 </html>
