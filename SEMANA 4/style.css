@@ -1,0 +1,70 @@
+
+/* styles.css: Estilos personalizados para el proyecto */
+:root {
+  --brand-primary: #ff5733; /* color personalizado para botones */
+  --brand-dark: #212529;
+}
+
+/* Compensar navbar fixed-top */
+body { padding-top: 70px; }
+
+/* Sobrescribir estilos de Bootstrap */
+.btn-primary {
+  background-color: var(--brand-primary);
+  border-color: #e24f2e;
+  box-shadow: 0 6px 14px rgba(226, 79, 46, 0.35);
+}
+.btn-primary:hover {
+  background-color: #ff6f4f;
+  border-color: #ff6f4f;
+  transform: translateY(-2px) scale(1.02);
+  transition: all 0.25s ease-in-out;
+}
+
+/* Cards animadas */
+.card {
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px rgba(0,0,0,0.12);
+}
+
+/* Título con animación */
+@keyframes fadeSlideIn {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.hero-title {
+  animation: fadeSlideIn 700ms ease-out both;
+}
+
+/* Ejemplo del modelo de cajas */
+.box-model-demo {
+  border: 2px dashed #ff6f4f;
+  padding: 16px;
+  margin: 12px 0;
+  border-radius: 12px;
+  background: #fff7f3;
+}
+
+/* Footer */
+footer a { color: #0d6efd; text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+
+/* Media query propia: cambiar colores en pantallas pequeñas */
+@media (max-width: 576px) {
+  body { background-color: #fff1ec; }
+  .navbar { background: linear-gradient(90deg, #ff6f4f, var(--brand-dark)); }
+  .hero-title { font-size: 1.75rem; }
+}
+
+.form-group {
+  margin-bottom: 16px;
+  max-width: 350px;              
+  padding: 16px 50px;
+  background: #1E1E1E;
+  border-radius: 12px;
+}

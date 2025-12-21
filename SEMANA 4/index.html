@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+<body>
+  <!-- Menú-->
+   <nav class="navbar navbar-expand-sm bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="nav-link disaabled"><h1>TechEdu Solutions</h1></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria count>
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+
+          <ul class="navbar-nav ms-auto">
+
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">CURSOS</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">TUTORIALES</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">CONTACTO</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">SOBRE NOSOTROS</a>
+            </li>
+          </ul>
+
+
+        </div>   
+    </div>
+   </nav>
+
+  <!--Carrusel-->
+  <div id="carouselExampleIndicators" class="carousel slide">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+  </div>
+  <div class="carousel-inner">
+    <div class="carousel-item active" style="max-height: 700px">
+      <img src="assets/img/slider-1.jpg" class="d-block w-100" alt="...">
+    </div>
+    <div class="carousel-item" style="max-height: 700px">
+      <img src="assets/img/slider-2.jpg" class="d-block w-100" alt="...">
+    </div>
+    <div class="carousel-item" style="max-height: 700px">
+      <img src="assets/img/slider-3.jpg" class="d-block w-100" alt="...">
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+<!--Ejemplo-->
+  <div class="container">
+    <h2 class="text-center">ACERCA DE NOSOTROS</h2>
+    <div class="row">
+      <div class="col">En <strong>TechEdu Solutions</strong>, creemos que la educación tecnológica es la clave para transformar el futuro. Somos una empresa dedicada a ofrecer soluciones innovadoras en robótica educativa, kits tecnológicos, y servicios de impresión y diseño 3D, orientados a estudiantes, instituciones y entusiastas de la tecnología.</div>
+      <div class="col">Nuestra misión es impulsar el aprendizaje práctico y creativo, brindando herramientas que faciliten la comprensión de conceptos STEM (Ciencia, Tecnología, Ingeniería y Matemáticas). Con un equipo apasionado por la innovación, buscamos que cada proyecto inspire curiosidad, fomente el pensamiento crítico y prepare a las nuevas generaciones para los retos del mundo digital</div>
+    </div>
+  </div>
+
+  <!--Tarjetas-->
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col">
+        <div class="card border-0">
+          <img src="assets/img/card-1.jpg" class="card-img-top rounded-circle" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">CURSOS</h5>
+            <p class="card-text">En TechEdu Solutions ofrecemos cursos diseñados para mejorar tus habilidades tecnológicas mientras desarrollas competencias clave.</p>
+            <a href="#" class="btn btn-primary">Mas información</a>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card border-0">
+          <img src="assets/img/card-2.jpg" class="card-img-top rounded-circle" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">ORGANIZACIÓN</h5>
+            <p class="card-text">En TechEdu Solutions mejorarmos tus habilidades para que que exista una mejor organización y que sea un factor clave.</p>
+            <a href="#" class="btn btn-primary">Mas información</a>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card border-0">
+          <img src="assets/img/card-3.jpg" class="card-img-top rounded-circle" alt="...">
+          <div class="card-body">
+            <h5 class="card-title">CONCENTRACIÓN</h5>
+            <p class="card-text">Nuestro enfoque práctico y dinámico te ayuda a gestionar tu tiempo, planificar proyectos y mantener la atención en cada etapa del aprendizaje, asegurando un progreso constante y efectivo.</p>
+            <a href="#" class="btn btn-primary">Mas información</a>
+          </div>
+        </div>
+      </div>
+    </div> 
+  </div>
+  <br>
+  <br> 
+  <div class="form-group">
+      <h5>Contacto</h5>
+      <h6>Déjanos tus datos y pronto te contactaremos</h6>
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" name="nombre" placeholder="Escribe tu nombre" required>
+  
+      <label for="correo">Correo:</label>
+      <input type="email" id="correo" name="correo" placeholder="ejemplo@correo.com" required>
+      <br>
+      <br>
+      <button type="submit" class="btn-enviar">Enviar</button>
+      </form>
+  </div>
+  <br>
+  <br>
+
+  <footer>
+        <div class="container-fluid bg-dark p-5 text-center">
+            <div class="row">
+                <div class="col"><a href="#" class="text-decoration-none text-success"><i class="bi bi-facebook"></i> FACEBOOK</a></div>
+                <div class="col"><a href="#" class="text-decoration-none text-success">TUTORIALES</a></div>
+                <div class="col"><a href="#" class="text-decoration-none text-success">CONTACTO</a></div>
+            </div>
+        </div>
+      </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+</body>
+</html>
