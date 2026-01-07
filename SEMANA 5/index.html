@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Semana 5 — Galería Interactiva con JavaScript</title>
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+  <header class="site-header">
+    <h1>Galería Interactiva</h1>
+    <br>
+    <p class="lead">
+        <ul>
+            <li>
+                Agrega URLs de imágenes.
+            </li>
+            <li>
+                Selecciónalas y elimínalas.
+            </li>
+            <li>
+                Usa los atajos de teclado para agilizar.
+            </li>
+        </ul>
+        <br>
+        <em>Nota:</em> Recuerda que al momento de buscar la imagen en cualquier navegador; se debe dar click derecho en la imagen que se desea subir y damos en la opción <strong>Copiar dirección de imagen / Copiar vínculo de imagen.</strong> 
+    </p>
+    <img src="assets/img/Captura de pantalla 2026-01-06 220021.png" class="img-01" alt="Imagen">
+  </header>
+
+  <section class="controls" aria-label="Controles de la galería">
+    <p>Pega aquí la URL de la imagen que se desea subir</p>
+        <p>   ⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️</p>
+  </section>
+
+  <section class="controls" aria-label="Controles de la galería">
+    <label for="imgUrl" class="sr-only">URL de la imagen</label>
+    <input id="imgUrl" type="url" placeholder="https://ejemplo.com/imagen.jpg" aria-describedby="help" />
+    <button id="btnAdd" class="btn" disabled>Agregar Imagen</button>
+    <button id="btnRemove" class="btn danger" disabled>Eliminar Imagen Seleccionada</button>
+  </section>
+
+  <p id="help" class="help">
+    Atajos: <kbd>Enter</kbd> Agregar · <kbd>Supr</kbd>/<kbd>Backspace</kbd> Elimina · <kbd>Esc</kbd> Deselecciona · <kbd>←</kbd>/<kbd>→</kbd> Navega
+  </p>
+
+  <main>
+    <p id="emptyMsg" class="empty">No hay imágenes todavía. Ingresa una URL y presiona <strong>Agregar Imagen</strong> o <strong>Enter</strong>.</p>
+    <section id="gallery" class="gallery" aria-label="Galería de imágenes"></section>
+  </main>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <footer class="site-footer">
+    <small>© <span id="year"></span> Byron — Semana 5. Hecho con JS + DOM.</small>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
