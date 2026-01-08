@@ -122,7 +122,7 @@ document.addEventListener('keydown', (ev) => {
   }
 });
 
-// Precarga opcional (puedes borrar este bloque)
+// Precarga opcional 
 const DEFAULT_IMAGES = [
   'https://www.fcbarcelona.com/photo-resources/2020/02/24/3f1215ed-07e8-47ef-b2c7-8a519f65b9cd/mini_UP3_20200105_FCB_VIS_View_1a_Empty.jpg?width=1200&height=750',
   'https://i.ytimg.com/vi/O3potfenY1A/maxresdefault.jpg',
