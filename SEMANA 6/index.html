@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Formulario con Validaciones</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<!-- Decoración: escudos laterales -->
+<img src="assets/img/pngimg.com - fcb_logo_PNG18.png" id="imagen-izquierda">
+<img src="assets/img/pngimg.com - fcb_logo_PNG18.png" id="imagen-derecha">
+<body>
+  <main class="container">
+    <h1 id="titulo-formulario">Registro de datos para formulario</h1>
+
+    <form id="formRegistro" novalidate>
+      <!-- Nombre -->
+      <div class="field">
+        <label for="nombre">Nombre y Apellido</label>
+        <input
+          type="text"
+          id="nombre"
+          name="nombre"
+          placeholder="Se debe escribir un nombre y un apellido"
+          autocomplete="name"
+          required
+          minlength="3"
+          aria-describedby="error-nombre"
+        />
+        <span id="error-nombre" class="hint" role="status" aria-live="polite"></span>
+      </div>
+
+      <!-- Correo electrónico-->
+      <div class="field">
+        <label for="email">Correo electrónico</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="tucorreo@ejemplo.com"
+          autocomplete="email"
+          required
+          aria-describedby="error-email"
+        />
+        <span id="error-email" class="hint" role="status" aria-live="polite"></span>
+      </div>
+
+      <!-- Contraseña -->
+      <div class="field">
+        <label for="password">Contraseña</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Mínimo 8 caracteres, número y símbolo"
+          required
+          aria-describedby="error-password"
+        />
+        <span id="error-password" class="hint" role="status" aria-live="polite"></span>
+      </div>
+
+      <!-- Confirmación de Contraseña-->
+      <div class="field">
+        <label for="confirmPassword">Repite tu Contraseña</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          name="confirmPassword"
+          placeholder="Vuelve a escribir tu contraseña"
+          required
+          aria-describedby="error-confirm"
+        />
+        <span id="error-confirm" class="hint" role="status" aria-live="polite"></span>
+      </div>
+
+      <!-- Edad -->
+      <div class="field">
+        <label for="edad">Edad</label>
+        <input
+          type="number"
+          id="edad"
+          name="edad"
+          placeholder="18"
+          inputmode="numeric"
+          min="0"
+          step="1"
+          required
+          aria-describedby="error-edad"
+        />
+        <span id="error-edad" class="hint" role="status" aria-live="polite"></span>
+      </div>
+
+      <!-- Botones -->
+      <div class="actions">
+        <button type="submit" id="btnEnviar" disabled>Enviar Datos</button>
+        <button type="reset" id="btnReiniciar" class="secondary">Borrar Campos</button>
+      </div>
+
+      <!-- Mensaje global -->
+      <div id="formMsg" class="form-msg" role="status" aria-live="polite"></div>
+    </form>
+    
+     
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

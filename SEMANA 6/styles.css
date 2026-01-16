@@ -1,0 +1,122 @@
+
+:root{
+  --ok:#16a34a;
+  --error:#dc2626;
+  --info:#64748b;
+  --focus:#2563eb;
+  --bg:#A50034;
+  --card:#002a68;
+  --text:#ffffff;
+  --shadow:0 8px 28px rgba(0,0,0,.08);
+}
+
+#titulo-formulario{
+    color: #fdfdfd;
+    font-size: 2rem;
+    text-align: center;
+}
+
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; }
+body{
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: var(--bg); color: var(--text);
+}
+
+.container{
+  max-width: 640px; margin: 48px auto; padding: 0 16px;
+}
+
+h1{ margin: 0 0 16px 0; }
+
+form{
+  background: var(--card);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  padding: 20px;
+}
+
+.field{ margin-bottom: 16px; }
+label{ display:block; font-weight: 650; margin-bottom: 8px; }
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"]{
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid #000000;
+  border-radius: 10px;
+  outline: none;
+  transition: all .15s ease;
+  background:#fff;
+}
+
+input:focus{
+  border-color: var(--focus);
+  box-shadow: 0 0 0 4px rgba(37,99,235,.15);
+}
+
+.hint{ font-size: .92rem; margin-top: 6px; display:block; color: var(--info); }
+.hint.error{ color: var(--error); }
+.hint.success{ color: var(--ok); }
+
+.is-invalid{ border-color: var(--error) !important; }
+.is-valid{ border-color: var(--ok) !important; }
+
+.actions{ display:flex; gap:12px; margin-top: 8px; }
+button{
+  border:0; border-radius: 10px; padding: 10px 16px; cursor:pointer; font-weight:650;
+}
+button#btnEnviar{ background:#111827; color:#fff; }
+button.secondary{ background:#e5e7eb; color:#111827; }
+button:disabled{ opacity:.6; cursor:not-allowed; }
+
+.form-msg{
+  margin-top: 14px; font-size: .95rem;
+  padding: 10px 12px; border-radius: 10px; display:none;
+}
+.form-msg.ok{ display:block; color:#065f46; background:#d1fae5; border:1px solid #10b981; }
+.form-msg.error{ display:block; color:#7f1d1d; background:#fee2e2; border:1px solid #ef4444; }
+
+
+
+/* ==== Escudo izquierdo ==== */
+.escudo{
+  position: fixed;                 
+  top: 50%;                        
+  transform: translateY(-50%);
+  width: clamp(72px, 10vw, 120px); 
+  height: auto;
+  opacity: 0.9;
+  z-index: 1;                      
+  pointer-events: none;            
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,.35));
+}
+
+/* ==== Escudo derecho ==== */
+#imagen-izquierda {
+  position: fixed;          
+  top: 50%;                 
+  left: -125px;               
+  transform: translateY(-50%);
+  width: 620px;             
+  height: auto;
+  z-index: 1;               
+  opacity: 0.9;
+  pointer-events: none;     
+}
+
+
+#imagen-derecha {
+  position: fixed;          
+  top: 50%;                 
+  right: -125px;               
+  transform: translateY(-50%);
+  width: 620px;             
+  height: auto;
+  z-index: 1;               
+  opacity: 0.9;
+  pointer-events: none;     
+}
+
