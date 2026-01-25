@@ -1,0 +1,223 @@
+
+/* ==== Reset básico y tipografía ==== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+  line-height: 1.5;
+  color: #222;
+  background: #f6f7fb;
+}
+
+/* Contenedor principal */
+.container {
+  max-width: 880px;
+  margin: 32px auto;
+  padding: 0 16px;
+}
+
+/* ==== Encabezados ==== */
+h1 {
+  font-size: 1.875rem; /* 30px aprox */
+  margin: 0 0 20px;
+  letter-spacing: 0.2px;
+}
+
+h2 {
+  font-size: 1.25rem;
+  margin: 28px 0 12px;
+}
+
+/* Línea separadora sutil */
+hr {
+  border: 0;
+  height: 1px;
+  background: linear-gradient(to right, #e5e7eb, #e5e7eb00);
+  margin: 20px 0;
+}
+
+/* ==== Lista de productos ==== */
+#lista-productos {
+  list-style: none;        /* sin viñetas */
+  padding: 0;              /* quitar padding por defecto */
+  margin: 0;
+}
+
+#lista-productos li {
+  background: #fff;
+  border: 1px solid #e7e9ee;
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 14px;      /* separación entre productos */
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+
+#lista-productos li strong {
+  font-size: 1.05rem;
+}
+
+#lista-productos li em {
+  color: #555;
+}
+
+/* Contenedor para los botones dentro del li */
+.product-actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ==== Botones ==== */
+button {
+  appearance: none;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  color: #111827;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.05s ease;
+}
+
+button:hover {
+  background: #f3f4f6;
+  border-color: #cbd5e1;
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+#btn-agregar {
+  background: #2563eb;
+  border-color: #1d4ed8;
+  color: #fff;
+}
+
+#btn-agregar:hover {
+  background: #1d4ed8;
+  border-color: #1e40af;
+}
+
+/* Botones secundarios con color de intención (opcional) */
+.btn-editar {
+  background: #10b981;
+  border-color: #0ea371;
+  color: #fff;
+}
+.btn-editar:hover {
+  background: #0ea371;
+}
+
+.btn-eliminar {
+  background: #ef4444;
+  border-color: #dc2626;
+  color: #fff;
+}
+.btn-eliminar:hover {
+  background: #dc2626;
+}
+
+/* ==== Formulario Agregar producto ==== */
+form,
+.form-grid {
+  display: grid;
+  gap: 12px;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+input[type="text"],
+input[type="number"] {
+  width: 280px;
+  max-width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+  color: #111827;
+  font-size: 0.95rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+input[type="text"]::placeholder,
+input[type="number"]::placeholder {
+  color: #9ca3af;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* Agrupación de campo + input (para HTML actual) */
+.form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Tip comentarios */
+small, .hint {
+  color: #6b7280;
+}
+
+/* ==== Edición inline: inputs dentro del li ==== */
+#lista-productos li input[type="text"],
+#lista-productos li input[type="number"] {
+  margin-bottom: 8px;
+}
+
+/* ==== Modo oscuro automático según sistema ==== */
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #0b1020;
+    color: #e5e7eb;
+  }
+  hr {
+    background: linear-gradient(to right, #22283a, #22283a00);
+  }
+  #lista-productos li {
+    background: #11162a;
+    border-color: #1f2841;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.4);
+  }
+  #lista-productos li em {
+    color: #cbd5e1;
+  }
+  input[type="text"],
+  input[type="number"] {
+    background: #0f1426;
+    color: #e5e7eb;
+    border-color: #243055;
+  }
+  button {
+    background: #11162a;
+    color: #e5e7eb;
+    border-color: #243055;
+  }
+  button:hover {
+    background: #0f1426;
+  }
+  #btn-agregar {
+    background: #2563eb;
+    border-color: #1d4ed8;
+    color: #fff;
+  }
+}
