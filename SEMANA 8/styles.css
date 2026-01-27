@@ -1,0 +1,42 @@
+/* ====== Estilos personalizados (además de Bootstrap) ====== */
+:root {
+  --sombra-color: rgba(0, 0, 0, 0.06);
+}
+
+body {
+  background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.hero-title {
+  letter-spacing: 0.3px;
+}
+
+/* Realce de filas al pasar el mouse */
+.table-hover tbody tr:hover {
+  box-shadow: 0 2px 12px var(--sombra-color);
+  transform: translateY(-1px);
+}
+
+/* Botón primario con un ligero brillo */
+.btn-primary {
+  box-shadow: 0 0 0.4rem rgba(13, 110, 253, 0.3);
+}
+
+/* Ajustes del carrusel */
+.carousel-item img {
+  object-fit: cover;
+  height: 400px;
+}
+
+/* Footer */
+footer a { text-decoration: none; }
+
+
+.texto{
+  color: #f8f9fa; 
+  text-shadow:
+    -1px -1px 0 black,
+     1px -1px 0 black,
+    -1px  1px 0 black,
+     1px  1px 0 black;
+}

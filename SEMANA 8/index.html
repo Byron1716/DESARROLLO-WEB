@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Semana 8 </title>
+  <!-- Bootstrap CSS -->
+   
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="styles.css" rel="stylesheet" />
+</head>
+<body>
+  <!-- Encabezado -->
+  <header class="mb-4">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="#">PLAYAS DE ECUADOR</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu" aria-controls="navbarMenu" aria-expanded="false" aria-label="Alternar navegación">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarMenu">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item"><a class="nav-link active" aria-current="page" href="#inicio">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" href="#productos">Playas</a></li>
+            <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div id="inicio" class="bg-light py-4 border-bottom">
+      <div class="container">
+        <h1 class="display-6 mb-1 hero-title">Apaga el ruido afuera para escuchar lo que pasa adentro</h1>
+        <p class="text-muted mb-0">Visita, disfruta y desconecta con las mejores playas del Ecuador.</p>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      
+
+      <!-- Carrusel -->
+      <section class="mb-5" aria-label="Carrusel de imágenes">
+        <div id="galeria" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-indicators">
+            <button type="button" data-bs-target="#galeria" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Diapositiva 1"></button>
+            <button type="button" data-bs-target="#galeria" data-bs-slide-to="1" aria-label="Diapositiva 2"></button>
+            <button type="button" data-bs-target="#galeria" data-bs-slide-to="2" aria-label="Diapositiva 3"></button>
+            <button type="button" data-bs-target="#galeria" data-bs-slide-to="3" aria-label="Diapositiva 4"></button>
+          </div>
+          <div class="carousel-inner rounded shadow-sm">
+            <div class="carousel-item active">
+              <img src="assets/img/galapagos_0_M.jpeg" class="d-block w-100" alt="Imagen aleatoria 1" />
+              <div class="carousel-caption d-none d-md-block">
+                <h5 class="texto">BIENVENIDO</h5>
+                <p class="texto">A tu bienesternar necesario.</p>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img src="assets/img/Playa-Los-Frailes-Ecuador.jpg" class="d-block w-100" alt="Imagen aleatoria 2" />
+              <div class="carousel-caption d-none d-md-block">
+                <h5 class="texto">MUNDO</h5>
+                <p class="texto">Que enamora.</p>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img src="assets/img/playa_de_salinas-_2_1.jpg" class="d-block w-100" alt="Imagen aleatoria 3" />
+              <div class="carousel-caption d-none d-md-block">
+                <h5 class="texto">DESCONECTA</h5>
+                <p class="texto">& Conecta con la naturaleza.</p>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img src="assets/img/fc8c8e1e097d3fd63552fd4b9bcd8aaa.jpg" class="d-block w-100" alt="Imagen aleatoria 4" />
+              <div class="carousel-caption d-none d-md-block">
+                <h5 class="texto">DESCUBRE</h5>
+                <p class="texto">y déjate encantar por sus maravillas.</p>
+              </div>
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#galeria" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Anterior</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#galeria" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Siguiente</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Botón de alerta personalizada -->
+      <div class="mb-4">
+        <button id="btnAlerta" class="btn btn-primary">
+          <span class="me-1">😉</span> Este es tu momento!! da click Aquí
+        </button>
+      </div>
+      <!-- Contenedor para alertas dinámicas -->
+      <div id="alertContainer" class="my-4"></div>
+      <br>
+      <br>
+      <br>
+      <!-- Tabla de productos -->
+      <section id="productos" class="mb-5">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+          <h2 class="h4 mb-0">Playas</h2>
+          <span class="badge bg-primary-subtle text-primary-emphasis border border-primary-subtle">Disponibilidad</span>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Playa</th>
+                <th scope="col">Precio</th>
+                <th scope="col">Cantidad de reservas</th>
+                <th scope="col">Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td>Playa Arena Blanca</td>
+                <td>$100.00</td>
+                <td>34</td>
+                <td><span class="badge bg-success">Disponible</span></td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Playa "Los Frailes"</td>
+                <td>$150</td>
+                <td>0</td>
+                <td><span class="badge bg-danger">Agotado</span></td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td>Playa de Salinas</td>
+                <td>$165</td>
+                <td>12</td>
+                <td><span class="badge bg-success">Disponible</span></td>
+              </tr>
+              <tr>
+                <th scope="row">4</th>
+                <td>Galápagos</td>
+                <td>$350</td>
+                <td>--</td>
+                <td><span class="badge bg-warning text-dark">Bajo stock</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <p>Todas las playas incluyen un paquete turístico de 5 días 4 noches con desayuno y cena incluidos; además de itenerarios para concoer cada destino</p>
+          <br>
+          <p>Para el caso de las islas encatadas de Galápagos:</p>
+          <ul>
+            <li>Paquete incluye 5 días 4 noches</li>
+            <li>Boleto áereo tanto de ida como de regreso</li>
+            <li>Ingreso a todas las áreas de las islas sin costo adicional</li>
+            <li>Impuestos de ingresos</li>
+            <li>Desayuno y cena</li>
+            <li>Itenerario de actividades durante los 5 días</li>
+          </ul> 
+        </div>
+      </section>
+
+      <!-- Formulario de contacto -->
+      <section id="contacto" class="mb-5">
+        <h2 class="h4 mb-3">Contacto</h2>
+        <form id="formContacto" class="row g-3" novalidate>
+          <div class="col-md-6">
+            <label for="nombre" class="form-label">Nombre completo *</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" required>
+            <div class="invalid-feedback">Por favor, ingresa tu nombre.</div>
+          </div>
+          <div class="col-md-6">
+            <label for="email" class="form-label">Correo electrónico *</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+            <div class="invalid-feedback">Ingresa un correo válido (ej. usuario@dominio.com).</div>
+          </div>
+          <div class="col-12">
+            <label for="mensaje" class="form-label">Escríbenos las fechas que te gustaría viajar, y cuantos adultos y niños están incluidos <em>(recuerda que para tenemos beneficios para paquetes superiores a 5 personas)</em> *</label>
+            <textarea class="form-control" id="mensaje" name="mensaje" rows="4" minlength="10" required></textarea>
+            <div class="invalid-feedback">El mensaje debe tener al menos 10 caracteres.</div>
+          </div>
+          <div class="col-12 d-flex gap-2">
+            <button type="submit" class="btn btn-success">Enviar</button>
+            <button type="reset" class="btn btn-outline-secondary">Limpiar</button>
+          </div>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <!-- Pie de página -->
+  <footer class="mt-auto py-4 bg-dark text-light">
+    <div class="container small d-flex flex-column flex-md-row justify-content-between gap-2">
+      <div>
+        <strong>Contacto:</strong> +593 969 059 459 · byron281728@gmail.com
+      </div>
+    
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Script propio -->
+  <script src="script.js"></script>
+</body>
+</html>
