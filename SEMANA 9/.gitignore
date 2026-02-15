@@ -1,0 +1,11 @@
+# Entorno virtual
+venv/
+# Cachés
+__pycache__/
+*.pyc
+# Variables de entorno (si usas .env)
+.env
+# Archivos de editor/OS
+.vscode/
+.idea/
+.DS_Store
