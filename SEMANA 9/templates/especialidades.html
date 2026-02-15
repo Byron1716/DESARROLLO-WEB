@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Especialidades – Clínica SaluVida{% endblock %}
+{% block content %}
+  <h2 class="fw-bold mb-3">Especialidades</h2>
+  <p class="text-body-secondary mb-4">Selecciona un área para ver disponibilidad de turnos.</p>
+
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    {% set datos = [
+      ('Medicina General','mdi-stethoscope','primary'),
+      ('Pediatría','mdi-human-baby-changing-table','success'),
+      ('Dermatología','mdi-face-man-shimmer-outline','warning'),
+      ('Odontología','mdi-tooth-outline','info'),
+      ('Cardiología','mdi-heart-pulse','secondary')
+    ] %}
+    {% for nombre, icono, color in datos %}
+    <div class="col">
+      <div class="card h-100 shadow-sm hover-card">
+        <div class="card-body d-flex align-items-start gap-3">
+          <span class="badge rounded-pill text-bg-{{ color }} px-3 py-2">{{ loop.index }}</span>
+          <div>
+            <h5 class="mb-1">{{ nombre }}</h5>
+            <div class="text-body-secondary small">Turnos disponibles hoy</div>
+          </div>
+        </div>
+        <div class="card-footer bg-transparent border-0 pt-0 pb-3 px-3">
+          <a href="{{ url_for('medico_por_especialidad', especialidad=nombre|lower|replace(' ','-')) }}"
+             class="btn btn-sm btn-outline-{{ color }}">Ver agenda</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% endblock %}

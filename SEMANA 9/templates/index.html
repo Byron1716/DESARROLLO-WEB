@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Inicio – Clínica SaluVida{% endblock %}
+
+{% block content %}
+  <!-- Hero -->
+  <section class="row align-items-center g-4 py-3">
+    <div class="col-lg-7">
+      <h1 class="display-5 fw-bold">Sistema de Turnos – <span class="text-primary">Clínica SaluVida</span></h1>
+      <p class="lead text-body-secondary">
+        Agenda tus citas médicas de forma rápida y segura. Gestiona turnos, especialidades y médicos en un solo lugar.
+      </p>
+      <div class="d-flex gap-2">
+        <a class="btn btn-primary btn-lg" href="{{ url_for('turno_demo') }}">Turno</a>
+        <a class="btn btn-outline-primary btn-lg" href="{{ url_for('especialidades') }}">Ver especialidades</a>
+      </div>
+    </div>
+    
+  </section>
+
+  <!-- Tarjetas destacadas -->
+  <section class="row g-4 mt-1">
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Agendamiento rápido</h5>
+          <p class="card-text">Crea y confirma turnos en segundos, con recordatorios automáticos.</p>
+          <a href="{{ url_for('turno_demo') }}" class="btn btn-outline-primary btn-sm">Agendar ahora</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Gestión por especialidad</h5>
+          <p class="card-text">Organiza la agenda por áreas médicas y optimiza la atención.</p>
+          <a href="{{ url_for('especialidades') }}" class="btn btn-outline-primary btn-sm">Explorar</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Historial del paciente</h5>
+          <p class="card-text">Visualiza citas anteriores y próximos controles en un panel claro.</p>
+          <a href="#" class="btn btn-outline-primary btn-sm disabled">Próximamente</a>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

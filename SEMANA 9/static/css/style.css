@@ -1,0 +1,27 @@
+/* Ajustes suaves para un look limpio */
+:root {
+  --sv-shadow: 0 6px 24px rgba(16,24,40,.08), 0 2px 8px rgba(16,24,40,.06);
+}
+
+.bg-body {
+  /* Usa el color de fondo del tema */
+  background-color: var(--bs-body-bg) !important;
+}
+
+.navbar .nav-link.active {
+  font-weight: 600;
+  color: var(--bs-primary) !important;
+}
+
+.hover-card { transition: transform .15s ease, box-shadow .15s ease; }
+.hover-card:hover { transform: translateY(-3px); box-shadow: var(--sv-shadow); }
+
+/* Hero cards */
+.bg-gradient {
+  background: linear-gradient(180deg, rgba(2,132,199,.06), rgba(37,99,235,.04));
+}
+
+/* Separación más amplia en pantallas grandes */
+@media (min-width: 992px) {
+  main .container { max-width: 980px; }
+}

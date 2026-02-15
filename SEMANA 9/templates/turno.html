@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Turno de {{ nombre or 'Paciente' }} – Clínica SaluVida{% endblock %}
+{% block content %}
+  <div class="row g-4">
+    <div class="col-lg-7">
+      <h2 class="fw-bold">Hola {{ nombre or 'paciente' }}</h2>
+      <p class="text-body-secondary">Completa el formulario para solicitar tu turno.</p>
+
+      <form class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Nombre</label>
+          <input type="text" class="form-control" placeholder="Ej: Juan Pérez" value="{{ nombre or '' }}">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Especialidad</label>
+          <select class="form-select">
+            <option>Medicina General</option>
+            <option>Pediatría</option>
+            <option>Dermatología</option>
+            <option>Odontología</option>
+            <option>Cardiología</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Fecha</label>
+          <input type="date" class="form-control">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Hora</label>
+          <input type="time" class="form-control">
+        </div>
+        <div class="col-12">
+          <label class="form-label">Notas</label>
+          <textarea class="form-control" rows="3" placeholder="Síntomas, preferencia de médico, etc."></textarea>
+        </div>
+        <div class="col-12">
+          <button type="button" class="btn btn-primary">Solicitar turno</button>
+          <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">Volver</a>
+        </div>
+      </form>
+    </div>
+
+    <div class="col-lg-5">
+      <div class="p-4 rounded-4 shadow-sm bg-body">
+        <h5 class="fw-semibold mb-2">Resumen</h5>
+        <ul class="list-unstyled small mb-0">
+          <li>Paciente: <strong>{{ nombre or '—' }}</strong></li>
+          <li>Clínica: <strong>SaluVida</strong></li>
+          <li>Estado: <span class="badge text-bg-success">Disponible</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+{% endblock %}
