@@ -25,3 +25,20 @@
 @media (min-width: 992px) {
   main .container { max-width: 980px; }
 }
+
+@page {
+  size: A4;
+  margin: 18mm 15mm 20mm 15mm;
+}
+
+.factura { display: table; width: 100%; border-collapse: collapse; }
+.factura-header { display: table-header-group; }
+.factura-footer { display: table-footer-group; }
+.factura-body { display: table-row-group; }
+
+.table, .tabla-detalle { width: 100%; border-collapse: collapse; font-size: 12px; }
+.tabla-detalle th, .tabla-detalle td { border: 1px solid #ddd; padding: 6px 8px; }
+.tabla-detalle thead th { background: #f5f5f7; }
+
+.no-break { break-inside: avoid; page-break-inside: avoid; }
+.page-break { break-before: page; page-break-before: always; }
