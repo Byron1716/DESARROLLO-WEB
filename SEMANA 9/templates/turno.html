@@ -15,6 +15,28 @@
                  placeholder="Juan Pérez"
                  value="{% if form_data %}{{ form_data.nombre }}{% elif turno_actual %}{{ turno_actual.paciente }}{% elif nombre %}{{ nombre }}{% endif %}">
         </div>
+        
+        <div class="col-sm-6">
+          <label for="cedula" class="form-label">Cédula</label>
+          <input type="text" class="form-control" id="cedula" name="cedula"
+                placeholder="0102030405"
+                value="{% if form_data %}{{ form_data.cedula }}{% endif %}">
+        </div>
+
+        <div class="col-sm-6">
+          <label for="telefono" class="form-label">Teléfono</label>
+          <input type="text" class="form-control" id="telefono" name="telefono"
+                placeholder="0991234567"
+                value="{% if form_data %}{{ form_data.telefono }}{% endif %}">
+        </div>
+
+        <div class="col-sm-6">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" class="form-control" id="email" name="email"
+                placeholder="correo@ejemplo.com"
+                value="{% if form_data %}{{ form_data.email }}{% endif %}">
+        </div>
+
 
         <div class="col-sm-6">
           <label for="especialidad" class="form-label">Especialidad</label>
