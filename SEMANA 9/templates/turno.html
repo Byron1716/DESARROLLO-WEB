@@ -75,6 +75,22 @@
         <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">Volver</a>
       </div>
     </form>
+
+    <hr class="my-4">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+      <h5 class="mb-0">Datos guardados</h5>
+      <div class="btn-group">
+        <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('ver_datos', formato='txt') }}">Ver TXT</a>
+        <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('ver_datos', formato='json') }}">Ver JSON</a>
+        <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('ver_datos', formato='csv') }}">Ver CSV</a>
+      </div>
+    </div>
+    <div class="mt-2 btn-group">
+      <a class="btn btn-outline-primary btn-sm" href="{{ url_for('descargar', formato='txt') }}">Descargar TXT</a>
+      <a class="btn btn-outline-primary btn-sm" href="{{ url_for('descargar', formato='json') }}">Descargar JSON</a>
+      <a class="btn btn-outline-primary btn-sm" href="{{ url_for('descargar', formato='csv') }}">Descargar CSV</a>
+    </div>
+
   </div>
 
   <div class="col-lg-4">

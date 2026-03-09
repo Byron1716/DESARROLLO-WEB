@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Datos ({{ formato|upper }}) · Clínica SaluVida{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="mb-0">Datos almacenados ({{ formato|upper }})</h2>
+  <div class="btn-group">
+    <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('ver_datos', formato='txt') }}">Ver TXT</a>
+    <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('ver_datos', formato='json') }}">Ver JSON</a>
+    <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('ver_datos', formato='csv') }}">Ver CSV</a>
+  </div>
+</div>
+
+<div class="mb-3">
+  <div class="btn-group">
+    <a class="btn btn-outline-primary btn-sm" href="{{ url_for('descargar', formato='txt') }}">Descargar TXT</a>
+    <a class="btn btn-outline-primary btn-sm" href="{{ url_for('descargar', formato='json') }}">Descargar JSON</a>
+    <a class="btn btn-outline-primary btn-sm" href="{{ url_for('descargar', formato='csv') }}">Descargar CSV</a>
+  </div>
+</div>
+
+{% if formato == 'txt' %}
+  {% if contenido %}
+    <pre class="p-3 bg-body-tertiary rounded border">{{ contenido }}</pre>
+  {% else %}
+    <div class="alert alert-info">No hay registros en TXT.</div>
+  {% endif %}
+{% elif formato in ['json', 'csv'] %}
+  {% if registros and registros|length > 0 %}
+    <div class="table-responsive">
+      <table class="table table-sm table-striped align-middle">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Cédula</th>
+            <th>Teléfono</th>
+            <th>Email</th>
+            <th>Especialidad</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Notas</th>
+            <th>Fecha (UTC)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in registros %}
+          <tr>
+            <td>{{ r.nombre if r.nombre is defined else r['nombre'] }}</td>
+            <td>{{ r.cedula if r.cedula is defined else r['cedula'] }}</td>
+            <td>{{ r.telefono if r.telefono is defined else r['telefono'] }}</td>
+            <td>{{ r.email if r.email is defined else r['email'] }}</td>
+            <td>{{ r.especialidad if r.especialidad is defined else r['especialidad'] }}</td>
+            <td>{{ r.fecha if r.fecha is defined else r['fecha'] }}</td>
+            <td>{{ r.hora if r.hora is defined else r['hora'] }}</td>
+            <td>{{ r.notas if r.notas is defined else r['notas'] }}</td>
+            <td>{{ r.fecha_iso if r.fecha_iso is defined else r['fecha_iso'] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="alert alert-info">No hay registros en {{ formato|upper }}.</div>
+  {% endif %}
+{% endif %}
+{% endblock %}
