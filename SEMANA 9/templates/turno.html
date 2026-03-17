@@ -19,36 +19,54 @@
         <div class="col-sm-6">
           <label for="cedula" class="form-label">Cédula</label>
           <input type="text" class="form-control" id="cedula" name="cedula"
-                placeholder="0102030405"
-                value="{% if form_data %}{{ form_data.cedula }}{% endif %}">
+                 placeholder="0102030405"
+                 value="{% if form_data %}{{ form_data.cedula }}{% endif %}">
         </div>
 
         <div class="col-sm-6">
           <label for="telefono" class="form-label">Teléfono</label>
           <input type="text" class="form-control" id="telefono" name="telefono"
-                placeholder="0991234567"
-                value="{% if form_data %}{{ form_data.telefono }}{% endif %}">
+                 placeholder="0991234567"
+                 value="{% if form_data %}{{ form_data.telefono }}{% endif %}">
         </div>
 
         <div class="col-sm-6">
           <label for="email" class="form-label">Email</label>
           <input type="email" class="form-control" id="email" name="email"
-                placeholder="correo@ejemplo.com"
-                value="{% if form_data %}{{ form_data.email }}{% endif %}">
+                 placeholder="correo@ejemplo.com"
+                 value="{% if form_data %}{{ form_data.email }}{% endif %}">
         </div>
-
 
         <div class="col-sm-6">
           <label for="especialidad" class="form-label">Especialidad</label>
-          {% set esp = (form_data.especialidad if form_data else (turno_actual.especialidad if turno_actual else '')) %}
+          {# Si vienes de validación fallida, respeta lo que envió el usuario; si vienes de sesión, úsalo; sino vacío #}
+          {% set esp_sel_txt = (form_data.especialidad if form_data else (turno_actual.especialidad if turno_actual else '')) %}
+          {% set esp_sel_id  = (form_data.especialidad_id if form_data and form_data.especialidad_id is defined else (turno.especialidad_id if turno is defined and turno else None)) %}
+
+          {# Modo 1: dinámico desde BD (preferido). 'especialidades' debe venir desde app.py #}
+          {% if especialidades %}
+          <select class="form-select" id="especialidad" name="especialidad_id" required>
+            <option value="">Seleccione…</option>
+            {% for e in especialidades %}
+              <option value="{{ e.id }}"
+                      {% if esp_sel_id and e.id == esp_sel_id %}selected{% endif %}
+                      {% if not esp_sel_id and esp_sel_txt and e.nombre == esp_sel_txt %}selected{% endif %}>
+                {{ e.nombre }}
+              </option>
+            {% endfor %}
+          </select>
+
+          {# Modo 2: fallback estático (si no pasan especialidades) #}
+          {% else %}
           <select class="form-select" id="especialidad" name="especialidad">
             <option value="">Seleccione…</option>
-            <option value="Pediatría" {{ 'selected' if esp=='Pediatría' else '' }}>Pediatría</option>
-            <option value="Medicina General" {{ 'selected' if esp=='Medicina General' else '' }}>Medicina General</option>
-            <option value="Dermatología" {{ 'selected' if esp=='Dermatología' else '' }}>Dermatología</option>
-            <option value="Odontología" {{ 'selected' if esp=='Odontología' else '' }}>Odontología</option>
-            <option value="Cardiología" {{ 'selected' if esp=='Cardiología' else '' }}>Cardiología</option>
+            <option value="Pediatría" {{ 'selected' if esp_sel_txt=='Pediatría' else '' }}>Pediatría</option>
+            <option value="Medicina General" {{ 'selected' if esp_sel_txt=='Medicina General' else '' }}>Medicina General</option>
+            <option value="Dermatología" {{ 'selected' if esp_sel_txt=='Dermatología' else '' }}>Dermatología</option>
+            <option value="Odontología" {{ 'selected' if esp_sel_txt=='Odontología' else '' }}>Odontología</option>
+            <option value="Cardiología" {{ 'selected' if esp_sel_txt=='Cardiología' else '' }}>Cardiología</option>
           </select>
+          {% endif %}
         </div>
 
         <div class="col-sm-6">
@@ -91,6 +109,36 @@
       <a class="btn btn-outline-primary btn-sm" href="{{ url_for('descargar', formato='csv') }}">Descargar CSV</a>
     </div>
 
+    {# Si te envían 'turnos' desde la vista, muéstralos aquí opcionalmente #}
+    {% if turnos %}
+      <hr class="my-4">
+      <h5>Turnos programados</h5>
+      <div class="table-responsive">
+        <table class="table table-sm table-striped">
+          <thead>
+            <tr>
+              <th>#</th><th>Paciente</th><th>Especialidad</th><th>Fecha</th><th>Hora</th><th>Estado</th><th>Notas</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for t in turnos %}
+              <tr>
+                <td>{{ t.id }}</td>
+                <td>{{ t.paciente }}</td>
+                <td>{{ t.especialidad }}</td>
+                <td>{{ t.fecha }}</td>
+                <td>{{ t.hora }}</td>
+                <td>{{ t.estado }}</td>
+                <td>{{ t.notas or '' }}</td>
+              </tr>
+            {% else %}
+              <tr><td colspan="7">No hay turnos.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endif %}
+
   </div>
 
   <div class="col-lg-4">
@@ -127,13 +175,16 @@
     const set = (s, v, dash='—') => { const el = $(s); if (el) el.textContent = (v && v.trim()) ? v : dash; };
 
     const nombre = $('#nombre');
-    const especialidad = $('#especialidad');
+    const especialidadSel = $('#especialidad'); // puede ser el select dinámico o el estático
     const fecha = $('#fecha');
     const hora = $('#hora');
     const notas = $('#notas');
 
     if (nombre) nombre.addEventListener('input', () => set('#r_paciente', nombre.value));
-    if (especialidad) especialidad.addEventListener('change', () => set('#r_especialidad', especialidad.value));
+    if (especialidadSel) especialidadSel.addEventListener('change', () => {
+      const txt = especialidadSel.options[especialidadSel.selectedIndex]?.text || especialidadSel.value;
+      set('#r_especialidad', txt);
+    });
     if (fecha) fecha.addEventListener('change', () => set('#r_fecha', fecha.value));
     if (hora) hora.addEventListener('change', () => set('#r_hora', hora.value));
     if (notas) notas.addEventListener('input', () => set('#r_notas', notas.value));
