@@ -10,9 +10,12 @@
       ('Pediatría','mdi-human-baby-changing-table','success'),
       ('Dermatología','mdi-face-man-shimmer-outline','warning'),
       ('Odontología','mdi-tooth-outline','info'),
-      ('Cardiología','mdi-heart-pulse','secondary')
+      ('Cardiología','mdi-heart-pulse','secondary'),
+      ('Traumatología','mdi-brain','danger')
     ] %}
     {% for nombre, icono, color in datos %}
+    
+
     <div class="col">
       <div class="card h-100 shadow-sm hover-card">
         <div class="card-body d-flex align-items-start gap-3">
@@ -30,4 +33,19 @@
     </div>
     {% endfor %}
   </div>
+  <br>
+  
+  <a href="{{ url_for('agregar_servicio') }}" class="diseño-boton">
+    Agregar Especialidad
+  </a>
+
+  <br>
+  <br>
+  <br>
+  
+  <a href="{{ url_for('reporte_especialidades') }}" class="btn btn-outline-primary mb-3">
+    📄 Descargar Reporte PDF
+  </a>
+
+
 {% endblock %}

@@ -7,19 +7,25 @@ import csv
 import json
 import sqlite3
 from datetime import datetime
-
-from inventario.database import (
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import cm
+from io import BytesIO
+from flask import send_file
+from inventario.inventario import (
     init_db,
-    # Pacientes
-    crear_paciente, listar_pacientes, obtener_paciente,
-    actualizar_paciente, eliminar_paciente,
-    # Especialidades
-    listar_especialidades, crear_especialidad,
-    obtener_especialidad, actualizar_especialidad, eliminar_especialidad,
-    # Turnos
-    upsert_paciente, crear_turno, listar_turnos, obtener_turno,
-    actualizar_turno, actualizar_estado_turno, eliminar_turno
+    listar_especialidades,
+    crear_especialidad,
+    obtener_especialidad,
+    eliminar_especialidad,
+    upsert_paciente,
+    crear_turno,
+    listar_turnos,
+    listar_turnos_reporte
 )
+
+from inventario.db import close_db
+
 
 app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY", "dev-secret")
@@ -28,6 +34,10 @@ app.secret_key = os.getenv("FLASK_SECRET_KEY", "dev-secret")
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
+
+@app.teardown_appcontext
+def cerrar_conexion(exception):
+    close_db(exception)
 
 @app.route('/registro', methods=['GET', 'POST'])
 def registro():
@@ -38,7 +48,6 @@ def registro():
         conn = sqlite3.connect("clinica.db")
         cursor = conn.cursor()
 
-        # 1️⃣ Verificar si el usuario ya existe
         cursor.execute(
             "SELECT id_usuario FROM usuarios WHERE nombre = ?",
             (nombre,)
@@ -49,7 +58,6 @@ def registro():
             flash("El usuario ya existe, elige otro", "warning")
             return render_template('registro.html')
 
-        # 2️⃣ Insertar solo si no existe
         cursor.execute(
             "INSERT INTO usuarios (nombre, password) VALUES (?, ?)",
             (nombre, password)
@@ -78,7 +86,6 @@ def load_user(user_id):
     if data:
         return Usuario(data[0], data[1], data[2])
     return None
-
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -161,7 +168,9 @@ if not os.path.exists(CSV_FILE):
         writer.writeheader()
 
 # Inicializar BD al cargar la app
-init_db()
+with app.app_context():
+    init_db()
+
 
 # ---------- Rutas ----------
 @app.get("/")
@@ -170,6 +179,7 @@ def index():
 
 @app.get("/especialidades")
 def especialidades():
+    datos = listar_especialidades()
     return render_template("especialidades.html", especialidades=listar_especialidades())
 
 @app.route("/turno", methods=["GET", "POST"])
@@ -275,6 +285,89 @@ def turno_demo():
 def ver_pacientes():
     pacientes = listar_pacientes()
     return render_template("pacientes.html", pacientes=pacientes)
+
+@app.get("/reporte/especialidades")
+def reporte_especialidades():
+    buffer = BytesIO()
+    pdf = canvas.Canvas(buffer, pagesize=letter)
+    width, height = letter
+
+    pdf.setFont("Helvetica-Bold", 14)
+    pdf.drawString(2 * cm, height - 2 * cm, "Reporte General de Especialidades y Pacientes")
+
+    pdf.setFont("Helvetica", 10)
+    y = height - 3.5 * cm
+
+    turnos = listar_turnos_reporte()
+
+    if not turnos:
+        pdf.drawString(2 * cm, y, "No existen turnos registrados.")
+    else:
+        especialidad_actual = None
+
+        for t in turnos:
+            # Cambio de especialidad
+            if t["especialidad"] != especialidad_actual:
+                y -= 1 * cm
+                pdf.setFont("Helvetica-Bold", 11)
+                pdf.drawString(2 * cm, y, f"Especialidad: {t['especialidad']}")
+                y -= 0.6 * cm
+                pdf.setFont("Helvetica", 10)
+                especialidad_actual = t["especialidad"]
+
+            texto = (
+                f"Paciente: {t['paciente']} | "
+                f"Cédula: {t['cedula'] or '-'} | "
+                f"Tel: {t['telefono'] or '-'} | "
+                f"Email: {t['email'] or '-'} | "
+                f"Fecha: {t['fecha']} | Hora: {t['hora']} | "
+                f"Estado: {t['estado']}"
+            )
+            pdf.drawString(2.5 * cm, y, texto)
+            y -= 0.5 * cm
+
+            if t["notas"]:
+                pdf.setFont("Helvetica-Oblique", 9)
+                pdf.drawString(3 * cm, y, f"Notas: {t['notas']}")
+                y -= 0.5 * cm
+                pdf.setFont("Helvetica", 10)
+
+            # Salto de página automático
+            if y < 2 * cm:
+                pdf.showPage()
+                pdf.setFont("Helvetica", 10)
+                y = height - 2 * cm
+
+    pdf.save()
+    buffer.seek(0)
+
+    return send_file(
+        buffer,
+        as_attachment=True,
+        download_name="reporte_especialidades_y_pacientes.pdf",
+        mimetype="application/pdf"
+    )
+
+@app.route("/agregar_servicio", methods=["GET", "POST"])
+def agregar_servicio():
+    if request.method == "POST":
+        nombre = request.form.get("nombre", "").strip()
+
+        if not nombre:
+            flash("El nombre es obligatorio", "danger")
+            return render_template("agregar_servicio.html")
+
+        try:
+            crear_especialidad(nombre)
+            flash("Especialidad agregada correctamente", "success")
+            return redirect(url_for("especialidades"))
+
+        except sqlite3.IntegrityError:
+            flash("La especialidad ya existe", "warning")
+            return render_template("agregar_servicio.html")
+
+    return render_template("agregar_servicio.html")
+
 
 # Cancelar turno
 @app.post("/turno/<int:turno_id>/cancelar")

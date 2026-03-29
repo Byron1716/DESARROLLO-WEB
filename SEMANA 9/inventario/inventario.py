@@ -1,210 +1,177 @@
-import os
-from dotenv import load_dotenv
-import mysql.connector
-from mysql.connector import pooling
+# inventario/inventario.py
+from inventario.db import get_db
 
-load_dotenv()
-
-CONFIG = dict(
-    host=os.getenv("DB_HOST", "localhost"),
-    user=os.getenv("DB_USER", "root"),
-    password=os.getenv("DB_PASSWORD", ""),
-    database=os.getenv("DB_NAME", "clinica_db"),
-    auth_plugin="mysql_native_password",
-)
-
-pool = pooling.MySQLConnectionPool(pool_name="pool_clinica", pool_size=5, **CONFIG)
-
-def _conn():
-    return pool.get_connection()
-
-def _exec(sql, params=None, many=False, commit=False, dictionary=False):
-    conn = _conn()
-    try:
-        cur = conn.cursor(dictionary=dictionary)
-        if many and isinstance(params, list):
-            cur.executemany(sql, params)
-        else:
-            cur.execute(sql, params or ())
-        if commit:
-            conn.commit()
-            return cur.rowcount
-        return cur
-    except Exception:
-        conn.rollback()
-        raise
-    finally:
-        # ojo: NO cerrar cursor aquí si retornamos resultados
-        pass
+print("✅ INVENTARIO SQLITE CARGADO:", __file__)
 
 # ---------- Init DB ----------
+
+
 def init_db():
-    conn = _conn()
-    try:
-        cur = conn.cursor()
-        cur.execute("CREATE DATABASE IF NOT EXISTS {} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci".format(CONFIG["database"]))
-        cur.execute("USE {}".format(CONFIG["database"]))
+    db = get_db()
 
-        cur.execute("""
-        CREATE TABLE IF NOT EXISTS pacientes (
-            id_paciente INT AUTO_INCREMENT PRIMARY KEY,
-            nombre VARCHAR(150) NOT NULL,
-            cedula VARCHAR(20) UNIQUE,
-            telefono VARCHAR(30),
-            email VARCHAR(120),
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        ) ENGINE=InnoDB;
-        """)
+    # Tabla especialidades
+    db.execute("""
+    CREATE TABLE IF NOT EXISTS especialidades (
+        id_especialidad INTEGER PRIMARY KEY AUTOINCREMENT,
+        nombre TEXT NOT NULL UNIQUE,
+        descripcion TEXT,
+        icono TEXT DEFAULT 'mdi-stethoscope',
+        color TEXT DEFAULT 'primary',
+        estado TEXT DEFAULT 'activa',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+    """)
+    db.execute("""
+    CREATE TABLE IF NOT EXISTS usuarios (
+        id_usuario INTEGER PRIMARY KEY AUTOINCREMENT,
+        nombre TEXT NOT NULL UNIQUE,
+        password TEXT NOT NULL
+    )
+    """)
+    db.execute("""
+    CREATE TABLE IF NOT EXISTS pacientes (
+        id_paciente INTEGER PRIMARY KEY AUTOINCREMENT,
+        nombre TEXT NOT NULL,
+        cedula TEXT,
+        telefono TEXT,
+        email TEXT
+    )
+    """)
 
-        cur.execute("""
-        CREATE TABLE IF NOT EXISTS especialidades (
-            id_especialidad INT AUTO_INCREMENT PRIMARY KEY,
-            nombre VARCHAR(120) NOT NULL UNIQUE,
-            estado ENUM('activa','inactiva') NOT NULL DEFAULT 'activa',
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        ) ENGINE=InnoDB;
-        """)
+    db.execute("""
+    CREATE TABLE IF NOT EXISTS turnos (
+        id_turno INTEGER PRIMARY KEY AUTOINCREMENT,
+        id_paciente INTEGER NOT NULL,
+        especialidad TEXT NOT NULL,
+        fecha TEXT NOT NULL,
+        hora TEXT NOT NULL,
+        notas TEXT,
+        estado TEXT DEFAULT 'Programado',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (id_paciente) REFERENCES pacientes(id_paciente)
+    )
+    """)
 
-        cur.execute("""
-        CREATE TABLE IF NOT EXISTS turnos (
-            id_turno INT AUTO_INCREMENT PRIMARY KEY,
-            id_paciente INT NOT NULL,
-            especialidad VARCHAR(120) NOT NULL,
-            fecha DATE NOT NULL,
-            hora TIME NOT NULL,
-            notas TEXT,
-            estado ENUM('Programado','Atendido','Cancelado') NOT NULL DEFAULT 'Programado',
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            CONSTRAINT fk_turno_paciente FOREIGN KEY (id_paciente)
-                REFERENCES pacientes(id_paciente) ON DELETE RESTRICT ON UPDATE CASCADE
-        ) ENGINE=InnoDB;
-        """)
-        conn.commit()
-    finally:
-        cur.close()
-        conn.close()
 
-# ---------- Pacientes ----------
-def crear_paciente(nombre, cedula=None, telefono=None, email=None):
-    sql = "INSERT INTO pacientes (nombre, cedula, telefono, email) VALUES (%s,%s,%s,%s)"
-    conn = _conn()
-    try:
-        cur = conn.cursor()
-        cur.execute(sql, (nombre, cedula, telefono, email))
-        conn.commit()
-        return cur.lastrowid
-    finally:
-        cur.close()
-        conn.close()
+    db.commit()
 
-def listar_pacientes():
-    cur = _exec("SELECT * FROM pacientes ORDER BY id_paciente DESC", dictionary=True)
-    rows = cur.fetchall()
-    cur.close(); cur.connection.close()
-    return rows
-
-def obtener_paciente(id_paciente):
-    cur = _exec("SELECT * FROM pacientes WHERE id_paciente=%s", (id_paciente,), dictionary=True)
-    row = cur.fetchone()
-    cur.close(); cur.connection.close()
-    return row
-
-def actualizar_paciente(id_paciente, nombre, cedula=None, telefono=None, email=None):
-    sql = "UPDATE pacientes SET nombre=%s, cedula=%s, telefono=%s, email=%s WHERE id_paciente=%s"
-    return _exec(sql, (nombre, cedula, telefono, email, id_paciente), commit=True)
-
-def eliminar_paciente(id_paciente):
-    return _exec("DELETE FROM pacientes WHERE id_paciente=%s", (id_paciente,), commit=True)
-
-def upsert_paciente(nombre, cedula=None, telefono=None, email=None):
-    """
-    Si existe por cédula o email, devuelve el id; sino inserta.
-    """
-    if cedula:
-        cur = _exec("SELECT id_paciente FROM pacientes WHERE cedula=%s", (cedula,), dictionary=True)
-        row = cur.fetchone(); cur.close(); cur.connection.close()
-        if row: return row["id_paciente"]
-
-    if email and not cedula:
-        cur = _exec("SELECT id_paciente FROM pacientes WHERE email=%s", (email,), dictionary=True)
-        row = cur.fetchone(); cur.close(); cur.connection.close()
-        if row: return row["id_paciente"]
-
-    return crear_paciente(nombre, cedula, telefono, email)
 
 # ---------- Especialidades ----------
-def listar_especialidades():
-    cur = _exec("SELECT * FROM especialidades WHERE estado='activa' ORDER BY nombre", dictionary=True)
-    rows = cur.fetchall(); cur.close(); cur.connection.close()
-    return rows
 
-def crear_especialidad(nombre, estado="activa"):
-    return _exec("INSERT INTO especialidades (nombre, estado) VALUES (%s,%s)", (nombre, estado), commit=True)
+def crear_paciente(nombre, cedula=None, telefono=None, email=None):
+    db = get_db()
+    cur = db.execute(
+        "INSERT INTO pacientes (nombre, cedula, telefono, email) VALUES (?, ?, ?, ?)",
+        (nombre, cedula, telefono, email)
+    )
+    db.commit()
+    return cur.lastrowid
+
+def listar_especialidades():
+    db = get_db()
+    cur = db.execute("SELECT * FROM especialidades WHERE estado='activa'")
+    return cur.fetchall()
+
+def crear_especialidad(nombre, descripcion=None):
+    db = get_db()
+    db.execute(
+        "INSERT INTO especialidades (nombre, descripcion) VALUES (?, ?)",
+        (nombre, descripcion)
+    )
+    db.commit()
 
 def obtener_especialidad(id_especialidad):
-    cur = _exec("SELECT * FROM especialidades WHERE id_especialidad=%s", (id_especialidad,), dictionary=True)
-    row = cur.fetchone(); cur.close(); cur.connection.close()
-    return row
-
-def actualizar_especialidad(id_especialidad, nombre=None, estado=None):
-    sets, params = [], []
-    if nombre is not None:
-        sets.append("nombre=%s"); params.append(nombre)
-    if estado is not None:
-        sets.append("estado=%s"); params.append(estado)
-    params.append(id_especialidad)
-    sql = f"UPDATE especialidades SET {', '.join(sets)} WHERE id_especialidad=%s"
-    return _exec(sql, tuple(params), commit=True)
+    db = get_db()
+    cur = db.execute(
+        "SELECT * FROM especialidades WHERE id_especialidad = ?",
+        (id_especialidad,)
+    )
+    return cur.fetchone()
 
 def eliminar_especialidad(id_especialidad):
-    return _exec("DELETE FROM especialidades WHERE id_especialidad=%s", (id_especialidad,), commit=True)
+    db = get_db()
+    db.execute(
+        "DELETE FROM especialidades WHERE id_especialidad = ?",
+        (id_especialidad,)
+    )
+    db.commit()
 
-# ---------- Turnos ----------
+def upsert_paciente(nombre, cedula=None, telefono=None, email=None):
+    db = get_db()
+
+    if cedula:
+        cur = db.execute(
+            "SELECT id_paciente FROM pacientes WHERE cedula = ?",
+            (cedula,)
+        )
+        row = cur.fetchone()
+        if row:
+            return row["id_paciente"]
+
+    if email and not cedula:
+        cur = db.execute(
+            "SELECT id_paciente FROM pacientes WHERE email = ?",
+            (email,)
+        )
+        row = cur.fetchone()
+        if row:
+            return row["id_paciente"]
+
+    cur = db.execute(
+        """
+        INSERT INTO pacientes (nombre, cedula, telefono, email)
+        VALUES (?, ?, ?, ?)
+        """,
+        (nombre, cedula, telefono, email)
+    )
+    db.commit()
+    return cur.lastrowid
+
 def crear_turno(id_paciente, especialidad, fecha, hora, notas=None):
-    sql = "INSERT INTO turnos (id_paciente, especialidad, fecha, hora, notas) VALUES (%s,%s,%s,%s,%s)"
-    conn = _conn()
-    try:
-        cur = conn.cursor()
-        cur.execute(sql, (id_paciente, especialidad, fecha, hora, notas))
-        conn.commit()
-        return cur.lastrowid
-    finally:
-        cur.close()
-        conn.close()
+    db = get_db()
+    cur = db.execute(
+        """
+        INSERT INTO turnos (id_paciente, especialidad, fecha, hora, notas)
+        VALUES (?, ?, ?, ?, ?)
+        """,
+        (id_paciente, especialidad, fecha, hora, notas)
+    )
+    db.commit()
+    return cur.lastrowid
 
 def listar_turnos():
-    sql = """
-    SELECT t.id_turno, t.especialidad, t.fecha, t.hora, t.estado, t.notas,
-           p.id_paciente, p.nombre AS paciente, p.cedula, p.telefono, p.email
-    FROM turnos t
-    JOIN pacientes p ON p.id_paciente = t.id_paciente
-    ORDER BY t.id_turno DESC
-    """
-    cur = _exec(sql, dictionary=True)
-    rows = cur.fetchall(); cur.close(); cur.connection.close()
-    return rows
+    db = get_db()
+    cur = db.execute("""
+        SELECT
+            t.id_turno,
+            t.fecha,
+            t.hora,
+            t.estado,
+            t.notas,
+            p.nombre AS paciente,
+            t.especialidad
+        FROM turnos t
+        JOIN pacientes p ON p.id_paciente = t.id_paciente
+        ORDER BY t.fecha DESC, t.hora DESC
+    """)
+    return cur.fetchall()
 
-def obtener_turno(id_turno):
-    cur = _exec("SELECT * FROM turnos WHERE id_turno=%s", (id_turno,), dictionary=True)
-    row = cur.fetchone(); cur.close(); cur.connection.close()
-    return row
 
-def actualizar_turno(id_turno, especialidad=None, fecha=None, hora=None, notas=None):
-    sets, params = [], []
-    if especialidad is not None:
-        sets.append("especialidad=%s"); params.append(especialidad)
-    if fecha is not None:
-        sets.append("fecha=%s"); params.append(fecha)
-    if hora is not None:
-        sets.append("hora=%s"); params.append(hora)
-    if notas is not None:
-        sets.append("notas=%s"); params.append(notas)
-    params.append(id_turno)
-    sql = f"UPDATE turnos SET {', '.join(sets)} WHERE id_turno=%s"
-    return _exec(sql, tuple(params), commit=True)
-
-def actualizar_estado_turno(id_turno, estado):
-    return _exec("UPDATE turnos SET estado=%s WHERE id_turno=%s", (estado, id_turno), commit=True)
-
-def eliminar_turno(id_turno):
-    return _exec("DELETE FROM turnos WHERE id_turno=%s", (id_turno,), commit=True)
+def listar_turnos_reporte():
+    db = get_db()
+    cur = db.execute("""
+        SELECT
+            t.especialidad,
+            p.nombre AS paciente,
+            p.cedula,
+            p.telefono,
+            p.email,
+            t.fecha,
+            t.hora,
+            t.estado,
+            t.notas
+        FROM turnos t
+        JOIN pacientes p ON p.id_paciente = t.id_paciente
+        ORDER BY t.especialidad, t.fecha, t.hora
+    """)
+    return cur.fetchall()

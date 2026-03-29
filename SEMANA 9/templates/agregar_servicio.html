@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-4">
+  <h2 class="mb-4">Agregar Especialidad</h2>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+
+          <form method="POST">
+            <div class="mb-3">
+              <label class="form-label">Nombre de la especialidad</label>
+              <input type="text" name="nombre" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+              Guardar Especialidad
+            </button>
+
+            <a href="{{ url_for('especialidades') }}" class="btn btn-secondary">
+              Cancelar
+            </a>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

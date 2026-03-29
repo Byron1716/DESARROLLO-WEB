@@ -42,3 +42,21 @@
 
 .no-break { break-inside: avoid; page-break-inside: avoid; }
 .page-break { break-before: page; page-break-before: always; }
+
+
+.diseño-boton {
+  background-color: transparent;
+  color: #000000;
+  border: 2px solid #000000;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.diseño-boton:hover {
+  background-color: #000000;
+  color: #ffffff;
+}

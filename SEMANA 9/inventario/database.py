@@ -47,7 +47,8 @@ def init_db():
         cur.execute("""
         CREATE TABLE IF NOT EXISTS especialidades (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nombre TEXT NOT NULL UNIQUE
+            nombre TEXT NOT NULL,
+            descripcion TEXT
         )
         """)
 

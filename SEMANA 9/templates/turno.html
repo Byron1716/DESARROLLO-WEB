@@ -60,11 +60,12 @@
           {% else %}
           <select class="form-select" id="especialidad" name="especialidad">
             <option value="">Seleccione…</option>
-            <option value="Pediatría" {{ 'selected' if esp_sel_txt=='Pediatría' else '' }}>Pediatría</option>
             <option value="Medicina General" {{ 'selected' if esp_sel_txt=='Medicina General' else '' }}>Medicina General</option>
+            <option value="Pediatría" {{ 'selected' if esp_sel_txt=='Pediatría' else '' }}>Pediatría</option>
             <option value="Dermatología" {{ 'selected' if esp_sel_txt=='Dermatología' else '' }}>Dermatología</option>
             <option value="Odontología" {{ 'selected' if esp_sel_txt=='Odontología' else '' }}>Odontología</option>
             <option value="Cardiología" {{ 'selected' if esp_sel_txt=='Cardiología' else '' }}>Cardiología</option>
+            <option value="Traumatología" {{ 'selected' if esp_sel_txt=='Traumatología' else '' }}>Traumatología</option>
           </select>
           {% endif %}
         </div>
