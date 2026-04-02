@@ -5,8 +5,7 @@ from flask import g
 
 # Ruta de la base de datos (un solo SQLite para todo el proyecto)
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATABASE = os.path.join(BASE_DIR, "..", "clinica.db")
+DATABASE = r"C:\Users\Byron Rosado\DESARROLLO WEB\SEMANA 9\clinica.db"
 
 def get_db():
     if "db" not in g:

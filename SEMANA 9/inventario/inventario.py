@@ -67,34 +67,48 @@ def crear_paciente(nombre, cedula=None, telefono=None, email=None):
     db.commit()
     return cur.lastrowid
 
+def crear_especialidad(nombre, icono, color):
+    db = get_db()
+    db.execute(
+        "INSERT INTO especialidades (nombre, icono, color) VALUES (?, ?, ?)",
+        (nombre, icono, color)
+    )
+    db.commit()
+
+
 def listar_especialidades():
     db = get_db()
-    cur = db.execute("SELECT * FROM especialidades WHERE estado='activa'")
-    return cur.fetchall()
+    return db.execute(
+        """
+        SELECT
+            id,
+            nombre,
+            icono,
+            color
+        FROM especialidades
+        ORDER BY nombre
+        """
+    ).fetchall()
 
-def crear_especialidad(nombre, descripcion=None):
+def obtener_especialidad(id):
+    db = get_db()
+    return db.execute(
+        "SELECT * FROM especialidades WHERE id = ?",
+        (id,)
+    ).fetchone()
+
+
+def eliminar_especialidad(id):
     db = get_db()
     db.execute(
-        "INSERT INTO especialidades (nombre, descripcion) VALUES (?, ?)",
-        (nombre, descripcion)
+        """
+        DELETE FROM especialidades
+        WHERE id = ?
+        """,
+        (id,)
     )
     db.commit()
 
-def obtener_especialidad(id_especialidad):
-    db = get_db()
-    cur = db.execute(
-        "SELECT * FROM especialidades WHERE id_especialidad = ?",
-        (id_especialidad,)
-    )
-    return cur.fetchone()
-
-def eliminar_especialidad(id_especialidad):
-    db = get_db()
-    db.execute(
-        "DELETE FROM especialidades WHERE id_especialidad = ?",
-        (id_especialidad,)
-    )
-    db.commit()
 
 def upsert_paciente(nombre, cedula=None, telefono=None, email=None):
     db = get_db()
@@ -175,3 +189,16 @@ def listar_turnos_reporte():
         ORDER BY t.especialidad, t.fecha, t.hora
     """)
     return cur.fetchall()
+
+def actualizar_especialidad(id, nombre, icono, color):
+    db = get_db()
+    db.execute(
+        """
+        UPDATE especialidades
+        SET nombre = ?, icono = ?, color = ?
+        WHERE id = ?
+        """,
+        (nombre, icono, color, id)
+    )
+    db.commit()
+

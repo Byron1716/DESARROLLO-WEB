@@ -5,37 +5,63 @@
   <p class="text-body-secondary mb-4">Selecciona un área para ver disponibilidad de turnos.</p>
 
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-    {% set datos = [
-      ('Medicina General','mdi-stethoscope','primary'),
-      ('Pediatría','mdi-human-baby-changing-table','success'),
-      ('Dermatología','mdi-face-man-shimmer-outline','warning'),
-      ('Odontología','mdi-tooth-outline','info'),
-      ('Cardiología','mdi-heart-pulse','secondary'),
-      ('Traumatología','mdi-brain','danger')
-    ] %}
-    {% for nombre, icono, color in datos %}
-    
+    {% for e in especialidades %}
+      {% if e.nombre and e.icono and e.color %}
+        <div class="col">
+          <div class="card h-100 shadow-sm hover-card">
+            <div class="card-body d-flex align-items-start gap-3">
+              <span class="badge rounded-pill text-bg-{{ e.color }} px-3 py-2">
+                {{ loop.index }}
+              </span>
+              <div>
+                <h5 class="mb-1">
+                  <i class="{{ e.icono }}"></i> {{ e.nombre }}
+                </h5>
+                <div class="text-body-secondary small">
+                  Turnos disponibles hoy
+                </div>
+              </div>
+            </div>
 
-    <div class="col">
-      <div class="card h-100 shadow-sm hover-card">
-        <div class="card-body d-flex align-items-start gap-3">
-          <span class="badge rounded-pill text-bg-{{ color }} px-3 py-2">{{ loop.index }}</span>
-          <div>
-            <h5 class="mb-1">{{ nombre }}</h5>
-            <div class="text-body-secondary small">Turnos disponibles hoy</div>
+            <div class="card-footer bg-transparent border-0 pt-0 pb-3 px-3">
+              <a href="{{ url_for(
+                  'medico_por_especialidad',
+                  especialidad=e.nombre|lower|replace(' ', '-')
+              ) }}"
+              class="btn btn-sm btn-outline-{{ e.color }}">
+                Ver agenda
+              </a>
+              <br>
+              <br>
+              <a href="{{ url_for('editar_especialidad', id=e.id) }}"
+                class="btn btn-sm btn-outline-secondary">
+                ✏️ Editar
+              </a>
+              <br>
+              <br>
+              
+            <form action="{{ url_for('eliminar_especialidad_route', id=e.id) }}"
+                  method="POST"
+                  style="display:inline;"
+                  onsubmit="return confirm('¿Deseas eliminar esta especialidad?')">
+
+                <button type="submit" class="btn btn-sm btn-outline-danger">
+                    🗑️ Eliminar
+                </button>
+
+            </form>
+
+
+            </div>
           </div>
         </div>
-        <div class="card-footer bg-transparent border-0 pt-0 pb-3 px-3">
-          <a href="{{ url_for('medico_por_especialidad', especialidad=nombre|lower|replace(' ','-')) }}"
-             class="btn btn-sm btn-outline-{{ color }}">Ver agenda</a>
-        </div>
-      </div>
-    </div>
+      {% endif %}
     {% endfor %}
   </div>
+
   <br>
   
-  <a href="{{ url_for('agregar_servicio') }}" class="diseño-boton">
+  <a href="{{ url_for('agregar_especialidad_route') }}" class="diseño-boton">
     Agregar Especialidad
   </a>
 

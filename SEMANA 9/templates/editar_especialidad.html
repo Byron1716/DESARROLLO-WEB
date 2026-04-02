@@ -1,21 +1,23 @@
 {% extends "base.html" %}
 {% block content %}
 
+
 <div class="container mt-4">
-  <h2 class="mb-4">Agregar Especialidad</h2>
+  <h2>Editar Especialidad</h2>
 
-  <div class="row">
-    <div class="col-md-6">
-      <div class="card shadow-sm">
-        <div class="card-body">
+  <form method="POST">
 
-          <form action="{{ url_for('agregar_especialidad_route') }}" method="POST">
-            <div class="mb-3">
-              <label class="form-label">Nombre de la especialidad</label>
-              <input type="text" name="nombre" class="form-control" required>
-            </div>
+    <div class="mb-3">
+      <label class="form-label">Nombre</label>
+      <input type="text"
+             name="nombre"
+             class="form-control"
+             value="{{ especialidad.nombre }}"
+             required>
+    </div>
 
-            <label>Ícono</label>
+    <div class="mb-3">
+      <label>Ícono</label>
               <select name="icono" class="form-select" required>
                 <option value="mdi-stethoscope">Estetoscopio</option>
                 <option value="mdi-heart-pulse">Cardiología</option>
@@ -33,8 +35,10 @@
                 <option value="mdi-flask-outline">Laboratorio</option>
                 <option value="mdi-ambulance">Emergencias</option>
               </select>
+    </div>
 
-              <label>Color</label>
+    <div class="mb-3">
+      <label>Color</label>
               <select name="color" class="form-select" required>
                 <option value="primary">Azul</option>
                 <option value="success">Verde</option>
@@ -45,22 +49,18 @@
                 <option value="light">Gris Claro</option>
                 <option value="dark">Negro</option>
               </select>
-            <br>
-            <br>
-              
-            <button type="submit" class="btn btn-primary">
-              Guardar Especialidad
-            </button>
-
-            <a href="{{ url_for('especialidades') }}" class="btn btn-secondary">
-              Cancelar
-            </a>
-          </form>
-
-        </div>
-      </div>
     </div>
-  </div>
+
+    <button type="submit" class="btn btn-primary">
+      Guardar Cambios
+    </button>
+
+    <a href="{{ url_for('especialidades') }}" class="btn btn-secondary">
+      Cancelar
+    </a>
+
+  </form>
 </div>
+
 
 {% endblock %}

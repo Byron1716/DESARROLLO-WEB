@@ -21,7 +21,8 @@ from inventario.inventario import (
     upsert_paciente,
     crear_turno,
     listar_turnos,
-    listar_turnos_reporte
+    listar_turnos_reporte,
+    actualizar_especialidad
 )
 
 from inventario.db import close_db
@@ -43,11 +44,21 @@ def cerrar_conexion(exception):
 def registro():
     if request.method == 'POST':
         nombre = request.form['usuario']
-        password = generate_password_hash(request.form['password'])
+        password = request.form['password']
+        confirmar = request.form['confirmar']
+
+        # Validar que las contraseñas coincidan
+        if password != confirmar:
+            flash("Las contraseñas no coinciden", "danger")
+            return render_template('registro.html')
+
+        # Hashear la contraseña SOLO después de validar
+        password_hash = generate_password_hash(password)
 
         conn = sqlite3.connect("clinica.db")
         cursor = conn.cursor()
 
+        # Verificar si el usuario ya existe
         cursor.execute(
             "SELECT id_usuario FROM usuarios WHERE nombre = ?",
             (nombre,)
@@ -58,9 +69,10 @@ def registro():
             flash("El usuario ya existe, elige otro", "warning")
             return render_template('registro.html')
 
+        #  Insertar el usuario
         cursor.execute(
             "INSERT INTO usuarios (nombre, password) VALUES (?, ?)",
-            (nombre, password)
+            (nombre, password_hash)
         )
 
         conn.commit()
@@ -70,6 +82,7 @@ def registro():
         return redirect(url_for('login'))
 
     return render_template('registro.html')
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -87,14 +100,13 @@ def load_user(user_id):
         return Usuario(data[0], data[1], data[2])
     return None
 
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         usuario = request.form['usuario']
         password = request.form['password']
 
-        conn = sqlite3.connect("clinica.db")
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
 
         
@@ -146,9 +158,11 @@ def dashboard():
 # ---------- Archivos de datos ----------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "data")
+DB_PATH = os.path.join(BASE_DIR, "clinica.db")
 TXT_FILE = os.path.join(DATA_DIR, "registros.txt")
 JSON_FILE = os.path.join(DATA_DIR, "registros.json")
 CSV_FILE = os.path.join(DATA_DIR, "registros.csv")
+
 os.makedirs(DATA_DIR, exist_ok=True)
 
 if not os.path.exists(TXT_FILE):
@@ -177,10 +191,10 @@ with app.app_context():
 def index():
     return render_template("login.html")
 
-@app.get("/especialidades")
+@app.route("/especialidades")
 def especialidades():
     datos = listar_especialidades()
-    return render_template("especialidades.html", especialidades=listar_especialidades())
+    return render_template("especialidades.html", especialidades=datos  )
 
 @app.route("/turno", methods=["GET", "POST"])
 def turno_guardar():
@@ -277,6 +291,42 @@ def turno_guardar():
     # GET
     return render_template("turno.html", nombre=None, turno_actual=session.get("turno_actual"))
 
+@app.route('/especialidades/<int:id>/editar', methods=['GET', 'POST'])
+def editar_especialidad(id):
+    especialidad = obtener_especialidad(id)
+
+    if not especialidad:
+        flash("Especialidad no encontrada", "danger")
+        return redirect(url_for("especialidades"))
+
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        icono = request.form['icono']
+        color = request.form['color']
+
+        actualizar_especialidad(id, nombre, icono, color)
+        flash("Especialidad actualizada correctamente", "success")
+        return redirect(url_for("especialidades"))
+
+    return render_template("editar_especialidad.html", especialidad=especialidad)
+
+@app.post('/especialidades/<int:id>/eliminar')
+def eliminar_especialidad_route(id):
+    eliminar_especialidad(id)
+    flash("Especialidad eliminada", "warning")
+    return redirect(url_for("especialidades"))
+
+@app.route('/agregar_especialidad', methods=['GET', 'POST'])
+def agregar_especialidad_route():
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        icono = request.form['icono']
+        color = request.form['color']
+        crear_especialidad(nombre, icono, color)
+        return redirect(url_for('especialidades'))
+    return render_template('agregar_servicio.html')
+
+
 @app.get("/turno-demo")
 def turno_demo():
     return redirect(url_for("turno_guardar"))
@@ -292,11 +342,40 @@ def reporte_especialidades():
     pdf = canvas.Canvas(buffer, pagesize=letter)
     width, height = letter
 
-    pdf.setFont("Helvetica-Bold", 14)
-    pdf.drawString(2 * cm, height - 2 * cm, "Reporte General de Especialidades y Pacientes")
+    # ---------------- ENCABEZADO ----------------
+    logo_path = os.path.join(app.static_folder, "img", "BR.png")
 
-    pdf.setFont("Helvetica", 10)
-    y = height - 3.5 * cm
+    if os.path.exists(logo_path):
+        pdf.drawImage(
+            logo_path,
+            2 * cm,      
+            height - 6 * cm,  
+            width=4 * cm,     
+            preserveAspectRatio=True,
+            mask="auto"
+        )
+
+    pdf.setFont("Helvetica-Bold", 16)
+    pdf.drawString(5.5 * cm, height - 2 * cm, "Clínica SaluVida")
+
+    pdf.setFont("Helvetica", 11)
+    pdf.drawString(
+        5.5 * cm,
+        height - 2.7 * cm,
+        "Reporte de Especialidades y Turnos"
+    )
+
+    pdf.line(2 * cm, height - 3.2 * cm, width - 2 * cm, height - 3.2 * cm)
+
+    pdf.setFont("Helvetica", 9)
+    pdf.drawString(
+        2 * cm,
+        height - 3.8 * cm,
+        f"Fecha de emisión: {datetime.now().strftime('%d/%m/%Y')}"
+    )
+
+    # ---------------- CONTENIDO ----------------
+    y = height - 5 * cm
 
     turnos = listar_turnos_reporte()
 
@@ -306,37 +385,41 @@ def reporte_especialidades():
         especialidad_actual = None
 
         for t in turnos:
-            # Cambio de especialidad
             if t["especialidad"] != especialidad_actual:
                 y -= 1 * cm
-                pdf.setFont("Helvetica-Bold", 11)
-                pdf.drawString(2 * cm, y, f"Especialidad: {t['especialidad']}")
-                y -= 0.6 * cm
+                pdf.setFont("Helvetica-Bold", 12)
+                pdf.drawString(
+                    2 * cm,
+                    y,
+                    f"Especialidad: {t['especialidad']}"
+                )
+                y -= 0.4 * cm
                 pdf.setFont("Helvetica", 10)
+                pdf.line(2 * cm, y, width - 2 * cm, y)
+                y -= 0.6 * cm
                 especialidad_actual = t["especialidad"]
 
             texto = (
-                f"Paciente: {t['paciente']} | "
-                f"Cédula: {t['cedula'] or '-'} | "
-                f"Tel: {t['telefono'] or '-'} | "
-                f"Email: {t['email'] or '-'} | "
-                f"Fecha: {t['fecha']} | Hora: {t['hora']} | "
+                f"Paciente: {t['paciente']}  |  "
+                f"Fecha: {t['fecha']}  Hora: {t['hora']}  |  "
                 f"Estado: {t['estado']}"
             )
+
             pdf.drawString(2.5 * cm, y, texto)
             y -= 0.5 * cm
 
-            if t["notas"]:
-                pdf.setFont("Helvetica-Oblique", 9)
-                pdf.drawString(3 * cm, y, f"Notas: {t['notas']}")
-                y -= 0.5 * cm
+            if y < 2.5 * cm:
+                pdf.showPage()
+                y = height - 3 * cm
                 pdf.setFont("Helvetica", 10)
 
-            # Salto de página automático
-            if y < 2 * cm:
-                pdf.showPage()
-                pdf.setFont("Helvetica", 10)
-                y = height - 2 * cm
+    # ---------------- PIE DE PÁGINA ----------------
+    pdf.setFont("Helvetica-Oblique", 9)
+    pdf.drawCentredString(
+        width / 2,
+        1.5 * cm,
+        "Clínica SaluVida · Documento institucional"
+    )
 
     pdf.save()
     buffer.seek(0)
@@ -344,29 +427,9 @@ def reporte_especialidades():
     return send_file(
         buffer,
         as_attachment=True,
-        download_name="reporte_especialidades_y_pacientes.pdf",
+        download_name="reporte_especialidades_saluvida.pdf",
         mimetype="application/pdf"
     )
-
-@app.route("/agregar_servicio", methods=["GET", "POST"])
-def agregar_servicio():
-    if request.method == "POST":
-        nombre = request.form.get("nombre", "").strip()
-
-        if not nombre:
-            flash("El nombre es obligatorio", "danger")
-            return render_template("agregar_servicio.html")
-
-        try:
-            crear_especialidad(nombre)
-            flash("Especialidad agregada correctamente", "success")
-            return redirect(url_for("especialidades"))
-
-        except sqlite3.IntegrityError:
-            flash("La especialidad ya existe", "warning")
-            return render_template("agregar_servicio.html")
-
-    return render_template("agregar_servicio.html")
 
 
 # Cancelar turno
